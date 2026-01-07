@@ -1,0 +1,24 @@
+{
+  "owner": "SampleCompany",
+  "project": "SampleApp",
+  "workDir": "/Users/<yourUserName>/magicPod1",
+  "capabilities": {
+    "browserName": "chrome",
+    "chromeDriverPort":9515
+  },
+  "internalAppiumPort": 9516,
+  "internalMagicPodPort": 9517,
+  "testCondition": {
+    "environment": "local",
+    "browser": "chrome",
+    "browser_window_size": "{\"width\":1200,\"height\":700}",
+    "shared_variables": [
+      {
+        "key": "USERNAME",
+        "value": "test_user",
+        "secret": false
+      }
+    ],
+    "base_url": "https://example.com"
+  }
+}
