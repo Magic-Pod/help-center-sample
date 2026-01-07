@@ -1,0 +1,15 @@
+{
+  "owner": "SampleCompany",
+  "project": "SampleApp",
+  "workDir": "/Users/<yourUserName>/magicPod2",
+  "capabilities": {
+    "browserName": "chrome",
+    "chromeDriverPort":9518
+  },
+  "internalAppiumPort": 9519,
+  "internalMagicPodPort": 9520,
+  "testCondition": {
+    "environment": "local",
+    "browser": "chrome"
+  }
+}
