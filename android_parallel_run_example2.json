@@ -1,0 +1,28 @@
+{
+    "owner": "SampleCompany",
+    "project": "SampleApp",
+    "capabilities": {
+        "udid": "xxxx(udid of the device)",
+        "systemPort": 1035,
+        "chromeDriverPort": 1036,
+        "platformName": "Android",
+        "platformVersion": "16",
+        "deviceName": "Pixel 8a",
+        "automationName": "UIAutomator2",
+        "app": "/Users/<yourUserName>/V2_webview_app_debug.apk"
+    },
+    "testSetting": {
+         "name": "Parallel run test2"
+    },
+    "testCondition": {
+        "environment": "local",
+        "os": "android",
+        "device_type": "real_device",
+        "app_type": "installed"
+
+    },
+    "internalAppiumPort": 1037,
+    "internalMagicPodPort": 1038,
+    "workDir": "/Users/<yourUserName>/Android2",
+    "testNumber": "2"
+}
