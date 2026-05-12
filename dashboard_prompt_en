@@ -1,0 +1,83 @@
+## Task Overview
+Use MagicPod MCP tools to fetch batch run results for the "<Test settings name>" test setting in the <Organization name> organization's <Project name> project, generate a React JSX dashboard file, and save it to the outputs folder.
+
+## Steps
+
+### Step 1: Fetch Data
+Use the `mcp__magicpod-mcp-server__API-get_batch_runs` tool with the following parameters:
+- organization_name: "<Organization name>"
+- project_name: "<Project name>"
+- count: 30
+
+From the retrieved data, **filter only entries where test_setting_name is "<Test settings name>"**.
+
+### Step 2: Fetch Details for Each Batch Run
+For each filtered batch run, use the `mcp__magicpod-mcp-server__API-get_batch_run` tool to fetch individual detail data (pass/fail per test case) in parallel.
+- organization_name: "<Organization name>"
+- project_name: "<Project name>"
+- batch_run_number: each batch run's number
+
+### Step 3: Generate the Dashboard JSX File
+Use the fetched data to generate a React JSX dashboard containing the following elements:
+
+**Last-1-month Filter:**
+- Use `DATA_FETCHED_AT` (today's date in JST) as the reference point; include only runs within the past month as `runs`
+- If all runs are already within 1 month, display all of them
+- Compute `ONE_MONTH_AGO` and filter `RAW_RUNS` accordingly
+
+**Summary Cards (4 cards):**
+1. Total Runs (last month / Default setting)
+2. Test Case Pass Rate (%): ratio of `succeeded / total` across all `runs`. Show `X / Y cases` as subtext
+3. Latest Pass Rate: succeeded/total for the most recent run. Show run number as subtext
+4. Average Duration
+
+**Tab Layout (3 tabs):**
+
+#### 📊 Overview Tab (using recharts)
+- Stacked bar chart of passed/failed counts per run (oldest run on the left)
+- Pass rate trend line chart
+
+#### ⚠️ Failure Ranking Tab
+- Show only test cases with a pass rate below 100% across all runs
+- Table sorted by lowest pass rate (rank badge, test case name, pass rate bar + %, failures / runs, detail link)
+- Color coding by pass rate: 0% = red, below 80% = orange, otherwise = yellow
+- If all are 100%, display "🎉 All test cases have a 100% pass rate"
+
+#### 📋 Run History Tab
+- Table of all runs (default: newest first)
+- Columns: Run #, Status, Started At (JST), Test Results, Pass Rate bar, Duration, Details link
+- **Sort feature**: click column headers for "Started At", "Pass Rate", "Duration" to toggle asc/desc. Show current sort direction with icons (↑↓↕)
+
+**Per-Test-Case Aggregation (`buildTcStats`):**
+- Aggregate `details` from each batch run in `runs` (filtered) to compute per-test-case pass rates
+- Produce `TC_STATS` and `FAILING_TCS` (below 100% only)
+- Always call `buildTcStats` after defining `runs`
+
+**Design Guidelines:**
+- Background: bg-gray-50, cards: bg-white rounded-xl shadow-sm
+- Passed: green-500, Failed: red-500, Accent: indigo-600
+- Font: sans-serif, overall clean and professional appearance
+- English UI (status shown as "Passed" / "Failed")
+- Display times converted to UTC+9 (JST)
+- Include a link to the MagicPod URL (the `url` field of each batch run)
+- Show "Last 1 month (N runs)" with count in the header
+
+**File Specification:**
+- Default-exported React component
+- Use `import { useState } from "react"` and `import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from "recharts"`
+- Hardcode `RAW_RUNS` (all fetched data) and `runs` (filtered) separately outside the component
+- Set `DATA_FETCHED_AT` to today's date in JST
+
+### Step 4: Save File
+Save the generated JSX to `/mnt/outputs/magicpod-dashboard.jsx` (overwrite if it exists).
+
+## Success Criteria
+- `/mnt/outputs/magicpod-dashboard.jsx` has been generated
+- Only runs within the last month using the Default setting are displayed
+- Per-test-case detail data (`details`) is included in each batch run
+- The latest run results are reflected
+- Present a computer:// link to the file for the user
+
+## Notes
+- If the MagicPod MCP tools are unavailable, notify the user with an error
+- If there are 0 runs, generate a dashboard that displays "No data"
