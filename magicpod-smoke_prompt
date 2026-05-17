@@ -2,7 +2,6 @@
 name: magicpod-smoke
 description: MagicPodを使ったスモークテストの作成・登録を行う。「スモークテスト作って」「MagicPodにテスト追加して」「重要な画面のテストをMagicPodで作りたい」「smoke test」「MagicPodテスト」など、MagicPodを使ったテスト自動化に関するリクエストが来たらこのスキルを使う。
 argument-hint: [テスト対象のURL または 画面名]
-allowed-tools: [Read, Glob, Grep, Bash]
 ---
 
 # MagicPod スモークテスト作成スキル
